@@ -17,7 +17,7 @@ return new class extends Migration
         $table->string('email')->nullable();
         $table->enum('tipo', ['reclamação', 'elogio', 'sugestão', 'denúncia']);
         $table->text('mensagem');
-        $table->enum('status', ['pendente', 'respondida', 'em análise'])->default('pendente');
+        $table->enum('status', ['pendente', 'visualizado', 'respondida', 'em análise'])->default('pendente');
         $table->timestamps();
     });
 }

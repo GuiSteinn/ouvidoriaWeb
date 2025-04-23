@@ -31,8 +31,15 @@ class ManifestacaoController extends Controller
     }
 
     public function show($id)
-    {
-        $manifestacao = Manifestacao::findOrFail($id);
-        return view('manifestacao.show', compact('manifestacao'));
+{
+    $manifestacao = Manifestacao::findOrFail($id);
+
+    // Se ainda estiver como "pendente", muda para "visualizado"
+    if ($manifestacao->status === 'pendente') {
+        $manifestacao->status = 'visualizado';
+        $manifestacao->save();
     }
+
+    return view('manifestacao.show', compact('manifestacao'));
+}
 }
