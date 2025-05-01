@@ -1,19 +1,24 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\ManifestacaoController;
 
-// Página inicial: formulário de manifestação
+// Página inicial redireciona para o formulário de criação
 Route::get('/', [ManifestacaoController::class, 'create'])->name('manifestacao.create');
 
-// Envio do formulário
-Route::post('/enviar', [ManifestacaoController::class, 'store'])->name('manifestacao.store');
+// Rota para salvar uma nova manifestação
+Route::post('/manifestacao', [ManifestacaoController::class, 'store'])->name('manifestacao.store');
 
-// Página de listagem para o admin
+// Rota para listar todas as manifestações (admin)
 Route::get('/admin', [ManifestacaoController::class, 'index'])->name('admin.index');
 
-// Página de detalhes de cada manifestação
-Route::get('/admin/{id}', [ManifestacaoController::class, 'show'])->name('admin.show');
+// Rota para exibir uma manifestação específica
+Route::get('/manifestacao/{id}', [ManifestacaoController::class, 'show'])->name('manifestacao.show');
 
+// Rota para listar as manifestações do usuário autenticado
+Route::get('/minhas-manifestacoes', [ManifestacaoController::class, 'minhasManifestacoes'])
+    ->middleware('auth')
+    ->name('manifestacao.minhas');
 
+require __DIR__.'/auth.php';

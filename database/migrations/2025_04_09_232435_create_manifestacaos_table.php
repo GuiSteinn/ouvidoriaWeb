@@ -6,27 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
-{
-    Schema::create('manifestacoes', function (Blueprint $table) {
-        $table->id();
-        $table->string('nome')->nullable(); // pode ser anônimo
-        $table->string('email')->nullable();
-        $table->enum('tipo', ['reclamação', 'elogio', 'sugestão', 'denúncia']);
-        $table->text('mensagem');
-        $table->enum('status', ['pendente', 'visualizado', 'respondida', 'em análise'])->default('pendente');
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('manifestacaos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome')->nullable();
+            $table->string('email')->nullable();
+            $table->string('tipo'); 
+            $table->enum('status', ['pendente', 'respondida', 'em análise', 'visualizado'])->default('pendente'); // Adicione 'visualizado'
+            $table->text('mensagem');
+            $table->timestamps();
+        });
+    }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('manifestacoes');
+        Schema::dropIfExists('manifestacaos');
     }
 };

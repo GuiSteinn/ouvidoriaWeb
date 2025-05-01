@@ -5,33 +5,40 @@
     <title>Nova Manifestação</title>
 </head>
 <body>
-    <h1>Ouvidoria Municipal</h1>
+@extends('layouts.app')
+
+@section('title', 'Nova Manifestação')
+
+@section('content')
+    <h1>Nova Manifestação</h1>
 
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
     @endif
 
-    <form method="POST" action="{{ route('manifestacao.store') }}">
+    <form action="{{ route('manifestacao.store') }}" method="POST">
         @csrf
 
-        <label>Nome (opcional):</label><br>
-        <input type="text" name="nome"><br><br>
+        @guest
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" id="nome" placeholder="Seu nome"><br><br>
 
-        <label>Email (opcional):</label><br>
-        <input type="email" name="email"><br><br>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" placeholder="Seu email"><br><br>
+        @endguest
 
-        <label>Tipo:</label><br>
-        <select name="tipo" required>
-            <option value="reclamação">Reclamação</option>
+        <label for="tipo">Tipo:</label>
+        <select name="tipo" id="tipo" required>
+            <option value="reclamacao">Reclamação</option>
             <option value="elogio">Elogio</option>
-            <option value="sugestão">Sugestão</option>
-            <option value="denúncia">Denúncia</option>
+            <option value="sugestao">Sugestão</option>
         </select><br><br>
 
-        <label>Mensagem:</label><br>
-        <textarea name="mensagem" rows="5" required></textarea><br><br>
+        <label for="mensagem">Mensagem:</label>
+        <textarea name="mensagem" id="mensagem" required></textarea><br><br>
 
-        <button type="submit">Enviar Manifestação</button>
+        <button type="submit">Enviar</button>
     </form>
+@endsection
 </body>
 </html>

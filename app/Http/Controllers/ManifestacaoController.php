@@ -19,27 +19,36 @@ class ManifestacaoController extends Controller
             'mensagem' => 'required',
         ]);
 
-        Manifestacao::create($request->all());
+        // Verifica se o usuário está autenticado
+        $nome = auth()->check() ? auth()->user()->name : $request->nome;
+        $email = auth()->check() ? auth()->user()->email : $request->email;
 
-        return redirect('/')->with('success', 'Sua manifestação foi enviada com sucesso!');
+        Manifestacao::create([
+            'nome' => $nome,
+            'email' => $email,
+            'tipo' => $request->tipo,
+            'mensagem' => $request->mensagem,
+            'status' => 'pendente', // Status padrão
+        ]);
+
+        return redirect()->route('manifestacao.create')->with('success', 'Sua manifestação foi enviada com sucesso!');
     }
 
     public function index()
     {
-        $manifestacoes = Manifestacao::latest()->get();
-        return view('manifestacao.index', compact('manifestacoes'));
+        // Busca todas as manifestações
+        $manifestacoes = Manifestacao::all();
+
+        // Retorna a view com as manifestações
+        return view('manifestacao.admin', compact('manifestacoes'));
     }
 
     public function show($id)
-{
-    $manifestacao = Manifestacao::findOrFail($id);
+    {
+        // Busca a manifestação pelo ID
+        $manifestacao = Manifestacao::findOrFail($id);
 
-    // Se ainda estiver como "pendente", muda para "visualizado"
-    if ($manifestacao->status === 'pendente') {
-        $manifestacao->status = 'visualizado';
-        $manifestacao->save();
+        // Retorna a view com os detalhes da manifestação
+        return view('manifestacao.show', compact('manifestacao'));
     }
-
-    return view('manifestacao.show', compact('manifestacao'));
-}
 }
