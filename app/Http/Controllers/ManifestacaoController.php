@@ -14,24 +14,22 @@ class ManifestacaoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'tipo' => 'required',
-            'mensagem' => 'required',
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'tipo' => 'required|string|max:255',
+            'mensagem' => 'required|string',
         ]);
-
-        // Verifica se o usuário está autenticado
-        $nome = auth()->check() ? auth()->user()->name : $request->nome;
-        $email = auth()->check() ? auth()->user()->email : $request->email;
 
         Manifestacao::create([
-            'nome' => $nome,
-            'email' => $email,
-            'tipo' => $request->tipo,
-            'mensagem' => $request->mensagem,
-            'status' => 'pendente', // Status padrão
+            'nome' => $validatedData['nome'],
+            'email' => $validatedData['email'],
+            'tipo' => $validatedData['tipo'],
+            'mensagem' => $validatedData['mensagem'],
+            'status' => 'Pendente',
         ]);
 
-        return redirect()->route('manifestacao.create')->with('success', 'Sua manifestação foi enviada com sucesso!');
+        return redirect()->back()->with('success', 'Manifestação cadastrada com sucesso!');
     }
 
     public function index()
@@ -45,10 +43,10 @@ class ManifestacaoController extends Controller
 
     public function show($id)
     {
-        // Busca a manifestação pelo ID
         $manifestacao = Manifestacao::findOrFail($id);
-
-        // Retorna a view com os detalhes da manifestação
+    
+        $manifestacao->update(['status' => 'Visualizada']);
+    
         return view('manifestacao.show', compact('manifestacao'));
     }
 }
