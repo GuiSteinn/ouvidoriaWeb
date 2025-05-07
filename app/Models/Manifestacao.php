@@ -9,9 +9,13 @@ class Manifestacao extends Model
 {
     use HasFactory;
 
+    protected $table = 'manifestacao';
 
-    protected $table = 'manifestacoes';
-
-    
-    protected $fillable = ['nome', 'email', 'tipo', 'mensagem', 'status'];
+    protected $fillable = [
+        'nome',
+        'email',
+        'tipo',
+        'mensagem',
+        'status',
+    ];
 }
